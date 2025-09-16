@@ -1,32 +1,17 @@
 {
-  "name": "glitch-hello-node",
+  "name": "recordando-figuras",
   "version": "1.0.0",
-  "description": "A simple Node app built on fastify, instantly up and running. Built to be remixed on Glitch.com.",
-  "main": "server.js",
+  "description": "Juego de memoria de figuras con Node.js y MySQL",
+  "main": "app.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node app.js"
   },
   "dependencies": {
-    "@fastify/formbody": "^7.4.0",
-    "@fastify/static": "^6.10.2",
-    "@fastify/view": "^8.0.0",
-    "body-parser": "^1.20.2",
-    "express": "^4.19.2",
-    "fastify": "^4.21.0",
-    "handlebars": "^4.7.8",
-    "sqlite3": "^5.1.7"
+    "express": "^4.18.2",
+    "mysql2": "^3.3.1",
+    "body-parser": "^1.20.2"
   },
   "engines": {
-    "node": "14.x"
-  },
-  "repository": {
-    "url": "https://glitch.com/edit/#!/glitch-hello-node"
-  },
-  "license": "MIT",
-  "keywords": [
-    "node",
-    "glitch"
-  ],
-  "devDependencies": {},
-  "author": ""
+    "node": ">=18.0.0"
+  }
 }
