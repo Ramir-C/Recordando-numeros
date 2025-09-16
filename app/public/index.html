@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,83 +10,59 @@
             text-align: center;
             background-color: #3498db;
         }
-
-        #container {
-            width: 80%;
-            margin: 0 auto;
-        }
-
-        #gameSection {
-            display: none; /* Ocultamos la sección del juego al principio */
-        }
-
+        #container { width: 80%; margin: 0 auto; }
+        #gameSection { display: none; }
         #gameArea {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
         }
-
         .figure {
             width: 80px;
             height: 80px;
             margin: 15px;
             cursor: pointer;
             border: 3px solid black;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.3s ease;
         }
-
-        #startButton,
-        #nextButton,
-        #restartButton {
+        #startButton, #nextButton, #restartButton {
             padding: 10px 20px;
             margin-top: 20px;
             font-size: 16px;
         }
-
-        #gameResult {
-            display: none;
-        }
-
-        #challengeText {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 20px 0;
-        }
+        #gameResult { display: none; }
+        #challengeText { font-size: 18px; font-weight: bold; margin: 20px 0; }
     </style>
 </head>
 <body>
     <div id="container">
-        <!-- Pantalla inicial -->
         <div id="startSection">
             <h1>Recordando números</h1>
-            <img src="https://cdn.glitch.global/fc386927-6a5e-4fc8-8787-2beac4099216/Imagen2.png?v=1711606381705" alt="Welcome Back Image">
-            
+            <img src="/Imagen2.png" alt="Welcome Back Image">
             <p>¡Bienvenido!</p>
             <p>Memoriza los números de las figuras y luego resuelve los desafíos.</p>
-            <p>Deberás asociar el color de la figura con el número.</p>
             <input type="text" id="playerName" placeholder="Ingresa tu nombre">
             <button id="startButton" onclick="startGame()">Comenzar Juego</button>
-            <div id="resultMessage"></div> <!-- Sección para mostrar los resultados -->
+            <div id="resultMessage"></div>
         </div>
 
-        <!-- Sección del juego -->
         <div id="gameSection">
             <p>¡Observa, recuerda y gana!</p>
             <div id="challengeText"></div>
             <div id="gameArea"></div>
-            <button id="nextButton" style="display: none;" onclick="nextChallenge()">Siguiente Desafío</button>
-            <button id="restartButton" style="display: none;" onclick="restartGame()">Jugar de Nuevo</button>
+            <button id="nextButton" style="display:none;" onclick="nextChallenge()">Siguiente Desafío</button>
+            <button id="restartButton" style="display:none;" onclick="restartGame()">Jugar de Nuevo</button>
             <div id="gameResult"></div>
-            <div id="attemptCount"></div> <!-- Nuevo elemento para mostrar los intentos -->
+            <div id="attemptCount"></div>
         </div>
     </div>
 
-    <audio id="successSound" src="https://cdn.glitch.global/6e430c3b-60be-4d4e-b53f-c8ce0fcb9707/acierto.wav?v=1711658410500"></audio>
-    <audio id="errorSound" src="https://cdn.glitch.global/6e430c3b-60be-4d4e-b53f-c8ce0fcb9707/error.wav?v=1711658404858"></audio>
-    
+    <audio id="successSound" src="/acierto.wav"></audio>
+    <audio id="errorSound" src="/error.wav"></audio>
+
     <script>
         const figures = [];
         const challenges = [
@@ -94,13 +70,13 @@
             'Toca la figura que tiene número impar.',
             'Toca la figura con el número de menor valor.',
             'Toca la figura con el número mayor valor.',
-            'Toca una de las figura que tiene un número que se repita.',
+            'Toca una de las figuras que tiene un número que se repita.',
             'Toca la figura que tenga un número con valor menor a 10.',
             'Toca la figura que tenga un número con valor mayor a 10.',
             'Toca la figura que si sumas dos veces su valor es mayor a 30.',
-            'Toca la figura que si sumas dos veces su valor es menor a 30.',
+            'Toca la figura que si sumas dos veces su valor es menor a 30.'
         ];
-        
+
         let currentChallengeIndex = 0;
         let totalErrors = 0;
         let startTime;
@@ -109,11 +85,8 @@
         let attemptCount = 0;
 
         function startGame() {
-            playerName = document.getElementById('playerName').value;
-            if (!playerName) {
-                alert("Por favor, ingresa tu nombre.");
-                return;
-            }
+            playerName = document.getElementById('playerName').value.trim();
+            if (!playerName) { alert("Por favor, ingresa tu nombre."); return; }
             attemptCount++;
             document.getElementById('startSection').style.display = 'none';
             document.getElementById('gameSection').style.display = 'block';
@@ -134,7 +107,7 @@
             for (let i = 1; i <= 10; i++) {
                 const number = Math.floor(Math.random() * 20) + 1;
                 const figure = createFigure(number);
-                figures.push({ number: number, figure: figure });
+                figures.push({ number, figure });
                 gameArea.appendChild(figure);
             }
         }
@@ -143,163 +116,90 @@
             const figure = document.createElement('div');
             figure.className = 'figure';
             figure.textContent = number;
-            figure.addEventListener('click', () => {
-                handleFigureClick(number);
-            });
+            figure.addEventListener('click', () => handleFigureClick(number));
             return figure;
         }
 
         function hideNumbers() {
-            figures.forEach((item) => {
+            figures.forEach(item => {
                 item.figure.textContent = '';
-                const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
-                item.figure.style.backgroundColor = randomColor;
+                item.figure.style.backgroundColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
             });
             showChallenge();
         }
 
         function showChallenge() {
             document.getElementById('challengeText').textContent = challenges[currentChallengeIndex];
-            setTimeout(() => {
-                document.getElementById('challengeText').textContent = '';
-            }, 8000);
+            setTimeout(() => { document.getElementById('challengeText').textContent = ''; }, 8000);
         }
 
         function handleFigureClick(number) {
             const challenge = challenges[currentChallengeIndex];
-            let message = '';
+            let message = 'Incorrecto. Intenta de nuevo.';
             switch (currentChallengeIndex) {
-                case 0:
-                    message = isEven(number) ? '¡Correcto!' : 'Incorrecto. Intenta de nuevo.';
-                    break;
-                case 1:
-                    message = isOdd(number) ? '¡Correcto!' : 'Incorrecto. Intenta de nuevo.';
-                    break;
-                case 2:
-                    const sortedFigures = figures.map(item => item.number).sort((a, b) => a - b);
-                    const index = sortedFigures.indexOf(number);
-                    if (index === 0) {
-                        message = '¡Correcto!';
-                    } else {
-                        message = 'Incorrecto. Intenta de nuevo.';
-                    }
-                    break;
-                case 3:
-                    const sortedFiguresDesc = figures.map(item => item.number).sort((a, b) => b - a);
-                    const indexDesc = sortedFiguresDesc.indexOf(number);
-                    if (indexDesc === 0) {
-                        message = '¡Correcto!';
-                    } else {
-                        message = 'Incorrecto. Intenta de nuevo.';
-                    }
-                    break;
+                case 0: message = isEven(number) ? '¡Correcto!' : message; break;
+                case 1: message = isOdd(number) ? '¡Correcto!' : message; break;
+                case 2: message = (Math.min(...figures.map(f => f.number)) === number) ? '¡Correcto!' : message; break;
+                case 3: message = (Math.max(...figures.map(f => f.number)) === number) ? '¡Correcto!' : message; break;
                 case 4:
-                    const repeatingNumbers = figures.map(item => item.number).filter((item, index, arr) => arr.indexOf(item) !== index);
-                    if (repeatingNumbers.includes(number)) {
-                        message = '¡Correcto!';
-                    } else {
-                        message = 'Incorrecto. Intenta de nuevo.';
-                    }
+                    const repeating = figures.map(f => f.number).filter((n,i,a)=>a.indexOf(n)!==i);
+                    message = repeating.includes(number) ? '¡Correcto!' : message;
                     break;
-                case 5:
-                    message = number < 10 ? '¡Correcto!' : 'Incorrecto. Intenta de nuevo.';
-                    break;
-                case 6:
-                    message = number > 10 ? '¡Correcto!' : 'Incorrecto. Intenta de nuevo.';
-                    break;
+                case 5: message = number < 10 ? '¡Correcto!' : message; break;
+                case 6: message = number > 10 ? '¡Correcto!' : message; break;
                 case 7:
-                    const sum30 = figures.some((item1, i) => {
-                        return figures.some((item2, j) => {
-                            if (i !== j) {
-                                return item1.number + item2.number === 30;
-                            }
-                        });
-                    });
-                    message = sum30 ? '¡Correcto!' : 'Incorrecto. Intenta de nuevo.';
-                    break;
+                    const sum30 = figures.some((a,i)=>figures.some((b,j)=>i!==j && (a.number + b.number === 30)));
+                    message = sum30 ? '¡Correcto!' : message; break;
                 case 8:
-                    const sumDouble = figures.some((item1, i) => {
-                        return figures.some((item2, j) => {
-                            if (i !== j) {
-                                return item1.number + item2.number * 2 < 30;
-                            }
-                        });
-                    });
-                    message = sumDouble ? '¡Correcto!' : 'Incorrecto. Intenta de nuevo.';
-                    break;
+                    const sumDouble = figures.some((a,i)=>figures.some((b,j)=>i!==j && (a.number + b.number*2 < 30)));
+                    message = sumDouble ? '¡Correcto!' : message; break;
             }
 
             document.getElementById('gameResult').textContent = message;
             if (message.includes('Incorrecto')) {
                 totalErrors++;
                 document.getElementById('errorSound').play();
-                if (totalErrors >= 5) {
-                    endGame('¡Has cometido demasiados errores! ¡Inténtalo de nuevo!');
-                }
+                if (totalErrors >= 5) endGame('¡Has cometido demasiados errores! ¡Inténtalo de nuevo!');
             } else {
                 document.getElementById('successSound').play();
-                if (currentChallengeIndex < challenges.length - 1) {
-                    nextChallenge();
-                } else {
-                    endGame('¡Felicidades! Has completado todos los desafíos.');
-                }
+                if (currentChallengeIndex < challenges.length - 1) nextChallenge();
+                else endGame('¡Felicidades! Has completado todos los desafíos.');
             }
         }
 
-        function isEven(number) {
-            return number % 2 === 0;
-        }
-
-        function isOdd(number) {
-            return number % 2 !== 0;
-        }
-
-        function nextChallenge() {
-            currentChallengeIndex++;
-            showChallenge();
-        }
+        function isEven(n){ return n % 2 === 0; }
+        function isOdd(n){ return n % 2 !== 0; }
+        function nextChallenge(){ currentChallengeIndex++; showChallenge(); }
 
         function endGame(message) {
             endTime = new Date();
-            const timeTaken = (endTime - startTime) / 1000;
-            const minutes = Math.floor(timeTaken / 60);
-            const seconds = Math.round(timeTaken % 60);
-            const resultMessage = `${message}<br>Total de errores: ${totalErrors}.<br>Tu tiempo total fue de ${minutes} minutos y ${seconds} segundos.<br>Intento actual: ${attemptCount}.<br>¡Intenta superarlo en la próxima partida!`;
-            document.getElementById('resultMessage').innerHTML = resultMessage; // Actualizamos la pantalla principal con los resultados
+            const timeTaken = (endTime - startTime)/1000;
+            const minutes = Math.floor(timeTaken/60);
+            const seconds = Math.round(timeTaken%60);
+            const resultMessage = `${message}<br>Total de errores: ${totalErrors}.<br>Tu tiempo: ${minutes} min ${seconds} seg.<br>Intento: ${attemptCount}`;
+            document.getElementById('resultMessage').innerHTML = resultMessage;
             document.getElementById('restartButton').style.display = 'inline-block';
-            document.getElementById('startSection').style.display = 'block'; // Mostramos la pantalla principal
-            document.getElementById('gameSection').style.display = 'none'; // Ocultamos la sección del juego
+            document.getElementById('startSection').style.display = 'block';
+            document.getElementById('gameSection').style.display = 'none';
             submitGameData(timeTaken, totalErrors, attemptCount);
         }
 
-        function restartGame() {
-            startGame();
-        }
+        function restartGame(){ startGame(); }
 
-        function submitGameData(timeTaken, errors, attempts) {
-            const gameData = {
-                nombre: playerName,
-                tiempo: timeTaken,
-                errores: errors,
-                intentos: attempts
-            };
-
+        function submitGameData(timeTaken, errors, intentos) {
             fetch('/save', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(gameData)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nombre: playerName,
+                    tiempo: timeTaken,
+                    errores: errors,
+                    intento: intentos
+                })
             })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error al guardar los datos del juego');
-                }
-                console.log('Datos del juego guardados correctamente.');
-            })
-            .catch(error => {
-                console.error('Error al guardar los datos del juego:', error);
-            });
+            .then(res => res.json())
+            .then(data => console.log('Datos guardados:', data))
+            .catch(err => console.error('Error al guardar:', err));
         }
     </script>
 </body>
