@@ -1,5 +1,5 @@
 {
-  "name": "recordando-figuras",
+  "name": "yes",
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
@@ -9,5 +9,13 @@
     "body-parser": "^1.20.3",
     "express": "^4.21.2",
     "mysql2": "^3.14.5"
+  },
+  "description": "This project includes a Node.js server script and a web page that connects to it. The front-end page presents a form the visitor can use to submit a color name, sending the submitted value to the back-end API running on the server. The server returns info to the page that allows it to update the display with the chosen color. 🎨",
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "yes"
   }
 }

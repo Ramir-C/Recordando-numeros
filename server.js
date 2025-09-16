@@ -1,18 +1,19 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mysql = require('mysql2/promise'); // versión promise para async/await
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Configurar middleware
 app.use(bodyParser.json());
-app.use(express.static('public')); // Carpeta donde se encuentra tu archivo HTML
+app.use(express.static(path.join(__dirname, 'public'))); // Carpeta donde se encuentra tu archivo HTML
 
 // Configurar conexión a MySQL
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'mysql.railway.internal',
     user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || 'WyXiejblgfpjJtImaggAZXRCsbjFjBPM',
+    password: process.env.DB_PASSWORD || 'wWvwRafyqvbGnCintjVOBKkFudFKisPN',
     database: process.env.DB_NAME || 'railway',
     waitForConnections: true,
     connectionLimit: 10,
