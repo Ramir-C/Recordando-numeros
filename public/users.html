@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Historial de Usuarios</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #f4f6fa;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .table-container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(44,62,80,0.1);
+            padding: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 8px;
+            text-align: center;
+        }
+        th {
+            background: #3498db;
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #ecf0f1;
+        }
+        tr:hover {
+            background: #d6eaf8;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <h1>Historial de Partidas</h1>
+        <table id="usersTable">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Intento</th>
+                    <th>Tiempo (s)</th>
+                    <th>Errores</th>
+                    <th>Resultado</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se insertarán los datos -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        fetch('/users')
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.querySelector('#usersTable tbody');
+                tbody.innerHTML = '';
+                data.users.forEach(user => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${user.nombre}</td>
+                        <td>${user.intento}</td>
+                        <td>${user.tiempo}</td>
+                        <td>${user.errores}</td>
+                        <td>${user.resultado}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+    </script>
+</body>
+</html>

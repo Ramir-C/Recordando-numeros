@@ -269,7 +269,8 @@
             document.getElementById('restartButton').style.display = 'inline-block';
             document.getElementById('startSection').style.display = 'block'; // Mostramos la pantalla principal
             document.getElementById('gameSection').style.display = 'none'; // Ocultamos la sección del juego
-            submitGameData(timeTaken, totalErrors, attemptCount);
+            let resultado = message.includes('Felicidades') ? 'Ganó' : 'Perdió';
+            submitGameData(timeTaken, totalErrors, attemptCount, resultado);
         }
 
         function restartGame() {
@@ -281,7 +282,8 @@
                 nombre: playerName,
                 tiempo: timeTaken,
                 errores: errors,
-                intentos: attempts
+                intento: attempts,
+                resultado: arguments[3] || ''
             };
 
             fetch('/save', {

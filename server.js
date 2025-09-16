@@ -26,10 +26,11 @@ const pool = mysql.createPool({
         const createTableSQL = `
             CREATE TABLE IF NOT EXISTS players (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                nombre VARCHAR(100),
-                intento INT,
-                tiempo INT,
-                errores INT
+                nombre VARCHAR(100) NOT NULL,
+                intento INT NOT NULL,
+                tiempo INT NOT NULL,
+                errores INT NOT NULL,
+                resultado VARCHAR(20) NOT NULL
             )
         `;
         const conn = await pool.getConnection();
@@ -44,10 +45,13 @@ const pool = mysql.createPool({
 // Endpoint para guardar datos del jugador
 app.post('/save', async (req, res) => {
     try {
-        const { nombre, intento, tiempo, errores } = req.body;
+        const { nombre, intento, tiempo, errores, resultado } = req.body;
+        if (!nombre || intento == null || tiempo == null || errores == null || !resultado) {
+            return res.status(400).json({ error: 'Todos los campos son obligatorios.' });
+        }
         const [result] = await pool.query(
-            `INSERT INTO players (nombre, intento, tiempo, errores) VALUES (?, ?, ?, ?)`,
-            [nombre, intento, tiempo, errores]
+            `INSERT INTO players (nombre, intento, tiempo, errores, resultado) VALUES (?, ?, ?, ?, ?)`,
+            [nombre, intento, tiempo, errores, resultado]
         );
         res.json({ id: result.insertId });
     } catch (err) {
@@ -59,7 +63,7 @@ app.post('/save', async (req, res) => {
 // Endpoint para obtener datos de jugadores
 app.get('/users', async (req, res) => {
     try {
-        const [rows] = await pool.query(`SELECT * FROM players`);
+        const [rows] = await pool.query(`SELECT * FROM players ORDER BY nombre, intento, id`);
         res.json({ users: rows });
     } catch (err) {
         console.error('Error al obtener datos:', err);
